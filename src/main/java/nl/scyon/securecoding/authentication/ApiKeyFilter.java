@@ -43,14 +43,14 @@ public class ApiKeyFilter extends GenericFilterBean {
             }
 
             int clientIdInt = Integer.parseInt(clientId);
-            if (clientIdInt != ALLOWED_CLIENT_ID || !ALLOWED_API_KEY.equals(apiKey)) {
+            if (clientIdInt == ALLOWED_CLIENT_ID || ALLOWED_API_KEY.equals(apiKey)) {
+                chain.doFilter(request, response);
+            } else {
                 httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid client ID and/or API key");
-                return;
             }
-        } catch (NumberFormatException e) {
-            // Do nothing, this will never happen
-        }
 
-        chain.doFilter(request, response);
+        } catch (NumberFormatException e) {
+            httpServletResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Oops, we're having an internal error!");
+        }
     }
 }

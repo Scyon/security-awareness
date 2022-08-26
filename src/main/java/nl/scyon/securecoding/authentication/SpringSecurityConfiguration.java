@@ -23,7 +23,7 @@ public class SpringSecurityConfiguration {
 
         return http
             .authorizeRequests()
-                .antMatchers("/authenticated/ping")
+                .antMatchers("/authenticated/**")
                     .authenticated()
             .and()
                 .httpBasic()

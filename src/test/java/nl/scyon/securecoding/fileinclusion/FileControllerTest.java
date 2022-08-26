@@ -28,4 +28,10 @@ class FileControllerTest {
         client.perform(get("/files?fileName=nonexisting.txt"))
             .andExpect(status().isNotFound());
     }
+
+    @Test
+    void testPathTraversalReturns404() throws Exception {
+        client.perform(get("/files?fileName=../application.properties"))
+            .andExpect(status().isNotFound());
+    }
 }

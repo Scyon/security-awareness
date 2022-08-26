@@ -30,4 +30,52 @@ class AuthenticatedControllerTest {
             .andExpect(status().isOk())
             .andExpect(content().string("Hi authenticated Ping!"));
     }
+
+    @Test
+    void testGetPong_unauthenticated() throws Exception {
+
+        client.perform(get("/authenticated/pong"))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser
+    void testGetPong_authenticated() throws Exception {
+
+        client.perform(get("/authenticated/pong"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("Hi authenticated Pong!"));
+    }
+
+    @Test
+    @WithMockUser
+    void testGetPageUsingApiKey_authenticated() throws Exception {
+        client.perform(
+                get("/authenticated/apiKey")
+                    .header("X-Client-Id", "12345")
+                    .header("X-Api-Key", "API_12345")
+            )
+            .andExpect(status().isOk())
+            .andExpect(content().string("Authorized using API key"));
+    }
+
+    @Test
+    @WithMockUser
+    void testGetPageUsingApiKey_unauthenticated() throws Exception {
+        client.perform(
+                get("/authenticated/apiKey")
+            )
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser
+    void testGetPageUsingApiKey_exception() throws Exception {
+        client.perform(
+                get("/authenticated/apiKey")
+                    .header("X-Client-Id", "NOT_AN_INT")
+                    .header("X-Api-Key", "API_12345")
+            )
+            .andExpect(status().is5xxServerError());
+    }
 }
