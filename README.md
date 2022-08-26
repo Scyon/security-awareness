@@ -19,13 +19,18 @@ However, to make full use of the learning potential we of course advise you not 
 **Package:** authentication
 
 An example of the "Deny by default" principle.
+The endpoint `/authenticated/ping` was implemented first and authentication was added. Later on, `/authenticated/pong` was added but somebody forgot to add authentication. How can we improve this? Make sure to add unit tests as well.
+
+Additionally, the endpoint `/authenticated/apiKey` was added including authentication using an API key (and the Basic authentication from the other authenticated endpoints, because we can). However, there have been reports that the filter for this is vulnerable to bypass authentication. Find the vulnerability, add a unit test for it, and fix the vulnerability (and unit test).
 
 ### Path Traversal
 **Package:** fileinclusion
 
 An example of the Path Traversal vulnerability.
+Write unit tests to simulate a Path Traversal attack and fix the vulnerable code to pass your unit test.
 
 ### Validation
 **Package:** validation
 
 An example to show why whitelist validation is way more powerful than blacklist validation.
+Convert the validator to whitelist validation.
